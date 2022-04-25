@@ -36,7 +36,11 @@ for ($i = 0; $i < 10; $i++) {
  * Insertion des données dans la table "users"
  */
 // ...
-
+for ($i = 0; $i < 10; $i++) {
+    $query = $db->prepare('INSERT INTO categories (name) VALUES (:name)');
+    $query->bindValue(':name', $faker->colorName);
+    $query->execute();
+    
 /**
  * Insertion des données dans la table "posts"
  */
