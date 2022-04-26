@@ -57,7 +57,7 @@ for ($i = 0; $i < 20; $i++) {
 /**
  * Insertion des données dans la table "posts"
  */
-for ($i = 0; $i < 100; $i++) {
+for ($i = 0; $i < 30; $i++) {
     $createdAt = $faker->dateTimeBetween('-3 years');
 
     $query = $db->prepare('INSERT INTO posts (user_id, category_id, title, content, cover, created_at) VALUES (:user_id, :category_id, :title, :content, :cover, :created_at)');
