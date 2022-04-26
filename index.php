@@ -40,7 +40,7 @@ $articles = $query->fetchAll();
                 <div class="row">
                     <!-- Titre du site -->
                     <div class="col-6 col-lg-12 text-start text-lg-center">
-                        <a href="#" title="Philo..." class="text-white text-decoration-none h1 logo">
+                        <a href="index.php" title="Philo..." class="text-white text-decoration-none h1 logo">
                             Philosophy.
                         </a>
                     </div>

@@ -1,3 +1,14 @@
+<?php
+
+// Connexion à la BDD
+require_once 'connexion.php';
+
+// Chargement des dépendances Composer
+require_once 'vendor/autoload.php';
+
+dump($_GET['id']);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -23,7 +34,7 @@
                 <div class="row">
                     <!-- Titre du site -->
                     <div class="col-6 col-lg-12 text-start text-lg-center">
-                        <a href="#" title="Philo..." class="text-white text-decoration-none h1 logo">
+                        <a href="index.php" title="Philo..." class="text-white text-decoration-none h1 logo">
                             Philosophy.
                         </a>
                     </div>
