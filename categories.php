@@ -6,13 +6,25 @@ require_once 'connexion.php';
 // Chargement des dépendances Composer
 require_once 'vendor/autoload.php';
 
-// Passe la requête SQL
-$query = $db->query('SELECT posts.id, posts.title, posts.content, posts.cover, posts.created_at, posts.category_id, categories.name AS category FROM posts INNER JOIN categories ON categories.id = posts.category_id ORDER BY posts.created_at DESC');
+/**
+ * "category_id" correspond au nom de variable dans l'URL :
+ * "categorie.php?category_id=?"
+ */
+//dump($_GET['category_id']);
 
-// Recupère tous les résultats et je les stocke dans la variable "$articles"
+$idCategory = htmlspecialchars(strip_tags($_GET['category_id']));
+
+$query = $db->prepare('SELECT posts.id, posts.title, posts.content, posts.cover, posts.created_at, posts.category_id, categories.name AS category FROM posts INNER JOIN categories ON categories.id = posts.category_id WHERE posts.category_id = :category_id ORDER BY posts.created_at DESC');
+$query->bindValue(':category_id', $idCategory, PDO::PARAM_INT);
+$query->execute();
+
 $articles = $query->fetchAll();
-
 // dump($articles);
+
+// Erreur 404
+if (!$articles) {
+    header('Location: 404.php');
+}
 
 ?>
 <!DOCTYPE html>
@@ -33,7 +45,7 @@ $articles = $query->fetchAll();
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <header class="bg-dark py-4">
+    <header class="bg-dark py-4">
             <div class="container">
 
                 <!-- Ligne -->
@@ -55,7 +67,7 @@ $articles = $query->fetchAll();
                     <!-- Navigation -->
                     <div class="col-12 d-none d-lg-block">
                         <nav>
-                            <ul class="d-flex align-items-center justify-content-center gap-5 py-3">
+                            <ul class="d-flex align-items-center justify-content-center gap-5 pt-3 m-0">
                                 <li><a href="index.html" title="Home" class="text-secondary text-decoration-none">Home</a></li>
                                 <li><a href="#" title="Categories" class="text-secondary text-decoration-none">Categories</a></li>
                                 <li><a href="#" title="Styles" class="text-secondary text-decoration-none">Styles</a></li>
@@ -64,30 +76,6 @@ $articles = $query->fetchAll();
                             </ul>
                         </nav>
                     </div>
-
-                    <!-- Carousel -->
-                    <div class="col-12">
-                        <div class="row d-flex align-items-center">
-                            <!-- Flèche de gauche -->
-                            <div class="col-lg-3 d-none d-lg-block text-end">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-left-short text-white" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
-                                </svg>
-                            </div>
-
-                            <!-- Image du carousel -->
-                            <div class="col-12 col-lg-6 pt-4 pt-lg-0">
-                                <img src="images/slide/03.jpg" alt="Image du slide" class="w-100 rounded carousel-img">
-                            </div>
-
-                            <!-- Flèche de droite -->
-                            <div class="col-lg-3 d-none d-lg-block text-start">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-right-short text-white" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </header>
@@ -95,10 +83,15 @@ $articles = $query->fetchAll();
 
         <main class="py-5">
             <div class="container">
+
+                <h3 class="pb-3">
+                    Catégorie : <?php echo $articles[0]['category']; ?>
+                </h3>
+
                 <!-- Les articles de mon blog -->
                 <div class="row">
                     
-                    <?php foreach($articles as $article): ?>
+                <?php foreach($articles as $article): ?>
                         <!-- Colonne contenant un article -->
                         <div class="col-12 col-lg-6 pb-5">
                             
