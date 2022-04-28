@@ -3,6 +3,14 @@
 require_once '../connexion.php';
 require_once '../vendor/autoload.php';
 
+dump($_POST);
+
+/**
+ * Sélection de toutes les catégories en BDD
+ */
+$query = $db->query('SELECT * FROM categories ORDER BY name');
+$categories = $query->fetchAll();
+
 /**
  * Déclaration de variables à NULL
  * Elles serviront à remplir le formulaire des données soumises
@@ -83,9 +91,7 @@ if (!empty($_POST)) {
                     </div>
                     <div class="mb-3">
                         <label for="content" class="form-label">Contenu</label>
-                        <textarea class="form-control" id="content" name="content" rows="10">
-                            <?php echo $content; ?>
-                        </textarea>
+                        <textarea class="form-control" id="content" name="content" rows="10"><?php echo $content; ?></textarea>
                     </div>
                     <div class="row mb-4">
                         <div class="col mb-3">
@@ -98,10 +104,15 @@ if (!empty($_POST)) {
                         <div class="col mb-3">
                             <label for="category" class="form-label">Catégorie</label>
                             <select class="form-select" id="category" name="category">
-                                <option selected>Choisir une catégorie</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                                <option>Choisir une catégorie</option>
+
+                                <!-- Liste des catégories -->
+                                <?php foreach($categories as $categorie): ?>
+                                    <option value="<?php echo $categorie['id']; ?>" <?php echo ($category !== null && $category == $categorie['id']) ? 'selected': null; ?>>
+                                        <?php echo $categorie['name']; ?>
+                                    </option>
+                                <?php endforeach; ?>
+
                             </select>
                         </div>
                     </div>
