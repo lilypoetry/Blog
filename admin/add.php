@@ -3,8 +3,6 @@
 require_once '../connexion.php';
 require_once '../vendor/autoload.php';
 
-dump($_POST);
-
 /**
  * Sélection de toutes les catégories en BDD
  */
@@ -19,15 +17,39 @@ $categories = $query->fetchAll();
 $title = null;
 $content = null;
 $category = null;
+$error = null;
 
 /**
  * Si la superglobale $_POST n'est pas vide, alors j'effectue
  * les vérifications nécessaires et l'insertion en BDD
  */
 if (!empty($_POST)) {
+    // Nettoyage des données
     $title = htmlspecialchars(strip_tags($_POST['title']));
     $content = htmlspecialchars(strip_tags($_POST['content']));
     $category = htmlspecialchars(strip_tags($_POST['category']));
+
+    // Vérifie que mes champs soient bien remplis
+    if (
+        !empty($title) 
+        && !empty($content) 
+        && !empty($category) 
+        && !empty($_FILES['cover']) 
+        && $_FILES['cover']['error'] === 0
+    ) {
+
+        // Upload l'image sur le serveur
+        require_once 'inc/functions.php';
+        $error = uploadPicture($_FILES['cover'], '../images/upload', 1);
+
+        // Si aucune erreur...
+        if ($error) {
+            // ...insertion en BDD
+        }
+    }
+    else {
+        $error = 'Tous les champs sont obligatoires';
+    }
 }
 
 ?>
@@ -85,6 +107,14 @@ if (!empty($_POST)) {
         <main class="py-5">
             <div class="container">
                 <form method="post" enctype="multipart/form-data" class="w-50 mx-auto">
+                    
+                    <!-- Affichage d'une erreur formulaire si nécessaire -->
+                    <?php if($error !== null): ?>
+                        <div class="alert alert-danger">
+                            <?php echo $error; ?>
+                        </div>
+                    <?php endif; ?>    
+                    
                     <div class="mb-3">
                         <label for="title" class="form-label">Titre</label>
                         <input type="text" value="<?php echo $title; ?>" class="form-control" id="title" name="title">
