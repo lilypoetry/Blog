@@ -1,18 +1,26 @@
 <?php
 
-// Connexion à la BDD
 require_once '../connexion.php';
-
-// Chargement des dépendances Composer
 require_once '../vendor/autoload.php';
 
-// Passe la requête SQL
-$query = $db->query('SELECT id, title, created_at FROM posts ORDER BY posts.created_at DESC');
+/**
+ * Déclaration de variables à NULL
+ * Elles serviront à remplir le formulaire des données soumises
+ * par l'utilisateur
+ */
+$title = null;
+$content = null;
+$category = null;
 
-// Recupère tous les résultats et je les stocke dans la variable "$articles"
-$articles = $query->fetchAll();
-
-// dump($articles);
+/**
+ * Si la superglobale $_POST n'est pas vide, alors j'effectue
+ * les vérifications nécessaires et l'insertion en BDD
+ */
+if (!empty($_POST)) {
+    $title = htmlspecialchars(strip_tags($_POST['title']));
+    $content = htmlspecialchars(strip_tags($_POST['content']));
+    $category = htmlspecialchars(strip_tags($_POST['category']));
+}
 
 ?>
 <!DOCTYPE html>
@@ -21,7 +29,7 @@ $articles = $query->fetchAll();
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Philosophy. - Administration</title>
+        <title>Philosophy. - Administration (Nouvel article)</title>
 
         <!-- JavaScript Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -30,7 +38,7 @@ $articles = $query->fetchAll();
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         
         <!-- Placer sa feuille de style CSS en dernière position -->
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="../css/style.css">
     </head>
     <body>
     <header class="bg-dark py-4">
@@ -68,41 +76,37 @@ $articles = $query->fetchAll();
 
         <main class="py-5">
             <div class="container">
-
-                <div class="d-flex align-items-center justify-content-between pb-4">
-                    <h3 class="pb-3">Gestion des articles</h3>
-                    <a href="./admin/add.php" title="Ajouter un article" class="btn btn-success">
-                        Nouvel article
-                    </a>
-                </div>
-
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr class="table-dark">
-                            <th scope="col">#</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Created at</th>
-                            <th scope="col">Options</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach($articles as $article): ?>
-                            <tr>
-                                <th class="py-4" scope="row"><?php echo $article['id']; ?></th>
-                                <td class="py-4"><?php echo $article['title']; ?></td>
-                                <td class="py-4"><?php echo date('d.m.Y', strtotime($article['created_at'])); ?></td>
-                                <td class="py-3">
-                                    <a href="#" title="Edit" class="btn btn-secondary">
-                                        Edit
-                                    </a>
-                                    <a href="#" title="Delete" class="ps-2 btn btn-outline-danger">
-                                        Delete this article
-                                    </a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                <form method="post" enctype="multipart/form-data" class="w-50 mx-auto">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Titre</label>
+                        <input type="text" value="<?php echo $title; ?>" class="form-control" id="title" name="title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Contenu</label>
+                        <textarea class="form-control" id="content" name="content" rows="10">
+                            <?php echo $content; ?>
+                        </textarea>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col mb-3">
+                            <label for="cover" class="form-label">Image de couverture</label>
+                            <input class="form-control" type="file" id="cover" name="cover">
+                            <div id="coverHelpBlock" class="form-text">
+                                L'image ne doit pas dépasser les 1Mo.
+                            </div>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="category" class="form-label">Catégorie</label>
+                            <select class="form-select" id="category" name="category">
+                                <option selected>Choisir une catégorie</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-success">Enregistrer l'article</button>
+                </form>
             </div>
         </main>
 
