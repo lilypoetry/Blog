@@ -1,10 +1,46 @@
+<?php
+
+    // Connexion à la BDD
+    require_once 'connexion.php';
+
+    // Chargement des dépendances Composer
+    require_once 'vendor/autoload.php';
+
+    // dump($_GET['id']);
+
+    // Nettoyage de la valeur reçu
+    $id = htmlspecialchars(strip_tags($_GET['id']));
+
+    /**
+     * On "prepare" un requête SQL deès qu'une info externe est
+     * transmise à celle-ci
+     */
+    // Pilih article berdasarkan id article yang di click user
+    $query = $db->prepare('SELECT posts.id, posts.title, posts.content, posts.cover, posts.created_at, categories.name AS category, users.lastname, users.firstname FROM posts INNER JOIN categories ON categories.id = posts.category_id INNER JOIN users ON users.id = posts.user_id WHERE posts.id = :id ORDER BY posts.created_at DESC');
+
+    $query->bindValue(':id', $id, PDO::PARAM_INT);
+    $query->execute();
+
+    // Récupération d'un seul enregistrement
+    $article = $query->fetch();
+    
+    // Si $article est égal à false...
+    if (!$article) {
+        // ... redirection vers une page 404
+        header('Location: 404.php');
+    }
+
+    // dump($article);
+    
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Philosophy. - Article</title>
+        <title>Philosophy. - <?php ?>$article['title']</title>
 
         <!-- JavaScript Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -24,7 +60,7 @@
                     <!-- Titre du site -->
                     <div class="col-6 col-lg-12 text-start text-lg-center">
                         <a href="#" title="Philo..." class="text-white text-decoration-none h1 logo">
-                            Philosophy.
+                            Philosophy. 
                         </a>
                     </div>
 
@@ -39,8 +75,8 @@
                     <div class="col-12 d-none d-lg-block">
                         <nav>
                             <ul class="d-flex align-items-center justify-content-center gap-5 pt-3 m-0">
-                                <li><a href="index.html" title="Home" class="text-secondary text-decoration-none">Home</a></li>
-                                <li><a href="#" title="Categories" class="text-secondary text-decoration-none">Categories</a></li>
+                                <li><a href="index.php" title="Home" class="text-secondary text-decoration-none">Home</a></li>
+                                <li><a href="categories.php" title="Categories" class="text-secondary text-decoration-none">Categories</a></li>
                                 <li><a href="#" title="Styles" class="text-secondary text-decoration-none">Styles</a></li>
                                 <li><a href="#" title="About" class="text-secondary text-decoration-none">About</a></li>
                                 <li><a href="#" title="Contact" class="text-secondary text-decoration-none">Contact</a></li>
@@ -54,28 +90,38 @@
 
         <main class="pt-5">
             <div class="container">
+            
                 <article>
-                    <h1 class="h1 text-start text-lg-center">This Is A Standard Format Post.</h1>
+                    <h1 class="h1 text-start text-lg-center"><?php echo $article['title']; ?></h1>
                     <div class="row pt-lg-2 justify-content-center">
-                        <div class="col-12 col-lg-6 text-start text-lg-end">
-                            <p class="text-secondary">December 12, 2021</p>
+                        <div class="col-12 col-lg-4 text-start text-lg-end">
+                            <p class="text-secondary">
+                            <?php echo date('F d, Y', strtotime($article['created_at'])); ?>
+                            </p>
                         </div>
-                        <div class="col-12 col-lg-6">
+                        <div class="col-12 col-lg-1">
                             <div class="d-flex align-items-center gap-2">
-                                <a href="#" title="Design" class="badge rounded-pill bg-primary text-decoration-none">Design</a>
-                                <a href="#" title="Photography" class="badge rounded-pill bg-primary text-decoration-none">Photography</a>
+                                <a href="categories.php?posts.category_id=" title="<?php echo $article['category']; ?>" class="badge rounded-pill bg-primary text-decoration-none">
+                                    <?php echo $article['category']; ?>
+                                </a>                            
                             </div>
                         </div>
+                        <div class="col-12 col-lg-4 text-lg-start">
+                            <?php echo "{$article['lastname']} {$article['firstname']}"; ?>
+                        </div>
                         <div class="col-12 py-5 text-center">
-                            <img src="images/01.jpg" alt="Image de l'article" class="rounded read-article-img">
+                            <img src="images/upload/<?php echo $article['cover']; ?>" alt="Image de l'article" class="rounded read-article-img">
                         </div>
                         <div class="col-12 col-lg-6 article">
-                            <p class="fw-bold">Duis ex ad cupidatat tempor Excepteur cillum cupidatat fugiat nostrud cupidatat dolor sunt sint sit nisi est eu exercitation incididunt adipisicing veniam velit id fugiat enim mollit amet anim veniam dolor dolor irure velit commodo cillum sit nulla ullamco magna amet magna cupidatat qui labore cillum sit in tempor veniam consequat non laborum adipisicing aliqua ea nisi sint. </p>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean odio risus, iaculis sollicitudin nisi vitae, fringilla iaculis est. Pellentesque in enim quam. Quisque commodo mauris tristique laoreet varius. Curabitur ut malesuada ligula, eget mattis lectus. Praesent urna est, pulvinar vel sagittis sed, cursus eu ipsum. Aenean pulvinar leo sit amet dignissim tempor. Vestibulum at vehicula urna, ut gravida nisl. Curabitur non ornare libero. Nam sit amet dolor magna. Donec molestie arcu quis vestibulum cursus. Nam in condimentum dolor. Suspendisse gravida dolor vitae pharetra consectetur. In eget ante sit amet est luctus blandit dapibus sed lacus. Etiam metus purus, mattis eu est auctor, tristique imperdiet erat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis accumsan ligula a enim lacinia sodales. Phasellus feugiat quam a pellentesque maximus. Morbi vitae vestibulum lorem, in ultricies neque. Pellentesque ut blandit urna, faucibus maximus odio. Nullam id purus finibus, gravida nibh sit amet, placerat lectus. Sed libero turpis, suscipit vitae orci a, rutrum congue eros. Nam tempus eros quis ex lobortis elementum. Donec tristique ipsum nec tempus ultrices. Duis semper tempus urna nec viverra. Phasellus dui elit, commodo sit amet libero in, blandit convallis orci. Sed fermentum vehicula congue. Donec a magna leo. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce nisl est, tempor sed leo vel, tincidunt ultricies urna. Nulla lacinia vulputate diam in convallis. Sed eu enim nec quam blandit commodo. Sed hendrerit ipsum sit amet tempor convallis. Curabitur facilisis tellus vel tempus pulvinar. Phasellus non orci nunc. Aliquam sit amet dignissim nulla. Interdum et malesuada fames ac ante ipsum primis in faucibus. Proin vitae viverra ex. In nec erat vitae sapien lacinia consequat ut in magna. Nam maximus ultricies nisl, et varius lorem cursus vitae. In quis lorem eget arcu pretium pellentesque eu a purus. Vivamus ac enim vel metus malesuada volutpat ut hendrerit leo. Nunc et tortor varius, suscipit nulla at, rutrum nibh Curabitur nec justo id justo tincidunt bibendum. Quisque congue ultricies risus in finibus. Proin dictum libero vitae rutrum sodales. Aliquam erat justo, vehicula ut nulla et, pellentesque finibus sapien. Nulla facilisi. Vestibulum non luctus nunc. Nam bibendum condimentum est sit amet eleifend. Cras dignissim pulvinar aliquam. In id placerat tellus. Duis in enim fermentum, pharetra felis non, volutpat est. Proin vulputate nulla elit, ut viverra nisl lacinia vitae. Vestibulum a semper nunc. Donec eros magna, viverra vel risus sit amet, rhoncus faucibus nulla. Vestibulum id nisl nisi. Curabitur efficitur volutpat hendrerit. Vestibulum blandit, tellus a pharetra porttitor, massa justo viverra libero, sit amet maximus quam sapien sit amet orci. </p>    
+                            <p class="fw-bold">Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, reiciendis.</p>
+                            <p><?php echo $article['content']; ?> </p>    
                         </div>
                     </div>
                 </article>
+                
             </div>
+            
+
             <div class="container-fluid bg-light mt-5">
                 <div class="row justify-content-center">
                     <div class="col-12 col-lg-6 py-5">
@@ -85,7 +131,9 @@
                                 <p class="m-0 fs-5 fw-bold">John Doe</p>
                             </div>
                             <div class="col-6 text-end">
-                                <p class="m-0 text-secondary">January 1, 2022</p>
+                                <p class="m-0 text-secondary">
+                                    <?php echo date('F d, Y', strtotime($article['created_at'])); ?>
+                                </p>
                             </div>
                             <div class="col-12 pt-2 pb-5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit id recusandae ex sit, amet, ad nemo vitae, fugit voluptas ducimus facere reiciendis neque. Expedita modi sunt, quas praesentium alias delectus?</div>
                         </div>
@@ -111,6 +159,7 @@
                         </div>
                     </div>
                 </div>
+            
 
                 <div class="row justify-content-center">
                     <div class="col-12 col-lg-6 pb-5">
