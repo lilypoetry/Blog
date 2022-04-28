@@ -71,7 +71,7 @@ $articles = $query->fetchAll();
 
                 <div class="d-flex align-items-center justify-content-between pb-4">
                     <h3 class="pb-3">Gestion des articles</h3>
-                    <a href="./admin/add.php" title="Ajouter un article" class="btn btn-success">
+                    <a href="add.php" title="Ajouter un article" class="btn btn-success">
                         Nouvel article
                     </a>
                 </div>
@@ -86,8 +86,8 @@ $articles = $query->fetchAll();
                     <thead>
                         <tr class="table-dark">
                             <th scope="col">#</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Created at</th>
+                            <th scope="col">Titre</th>
+                            <th scope="col">Créer le</th>
                             <th scope="col">Options</th>
                         </tr>
                     </thead>
@@ -98,11 +98,11 @@ $articles = $query->fetchAll();
                                 <td class="py-4"><?php echo $article['title']; ?></td>
                                 <td class="py-4"><?php echo date('d.m.Y', strtotime($article['created_at'])); ?></td>
                                 <td class="py-3">
-                                    <a href="#" title="Edit" class="btn btn-secondary">
-                                        Edit
+                                    <a href="edit.php?id=<?php echo $article['id']; ?>" title="Editer" class="btn btn-secondary">
+                                        Editer
                                     </a>
                                     <a href="#" title="Delete" class="ps-2 btn btn-outline-danger">
-                                        Delete this article
+                                        Supprimer cet article
                                     </a>
                                 </td>
                             </tr>
