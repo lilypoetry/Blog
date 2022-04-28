@@ -76,6 +76,12 @@ $articles = $query->fetchAll();
                     </a>
                 </div>
 
+                <?php if(isset($_GET['successAdd'])): ?>
+                    <div class="alert alert-success mb-4">
+                        L'article à bien été ajouté !
+                    </div>
+                <?php endif; ?>
+
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr class="table-dark">

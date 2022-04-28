@@ -47,7 +47,15 @@ if (!empty($_POST)) {
         if (empty($upload['error'])) {
             $fileName = $upload['filename'];
 
-            // ...insertion en BDD
+            $query = $db->prepare('INSERT INTO posts (user_id, category_id, title, content, cover, created_at) VALUES (1, :category_id, :title, :content, :cover, NOW())');
+            $query->bindValue(':category_id', $category, PDO::PARAM_INT);
+            $query->bindValue(':title', $title);
+            $query->bindValue(':content', $content);
+            $query->bindValue(':cover', $fileName);
+            $query->execute();
+
+            // Redirection vers la page d'accueil de l'administration
+            header('Location: index.php?successAdd=1');
         }
         else {
             // Sinon, on transfère l'erreur à la variable "$error" pour l'afficher
