@@ -40,11 +40,19 @@ if (!empty($_POST)) {
 
         // Upload l'image sur le serveur
         require_once 'inc/functions.php';
-        $error = uploadPicture($_FILES['cover'], '../images/upload', 1);
+        $upload = uploadPicture($_FILES['cover'], '../images/upload', 1);
 
-        // Si aucune erreur...
-        if ($error) {
+        // Si la variable "$upload" ne contient la clé "error", 
+        // alors on peut effectuer l'insertion en BDD
+        if (empty($upload['error'])) {
+            $fileName = $upload['filename'];
+
             // ...insertion en BDD
+        }
+        else {
+            // Sinon, on transfère l'erreur à la variable "$error" pour l'afficher
+            // au dessus du formulaire
+            $error = $upload['error'];
         }
     }
     else {
