@@ -46,7 +46,7 @@ if (!empty($_POST)) {
             require_once 'inc/fonction.php';
             $upload = uploadPicture($_FILES['cover'], '../images/upload', 1);
 
-            // Si la variable $upload ne contient pa "erreur", 
+            // Si la variable $upload ne contient la clé "erreur", 
             // alors on peut effectuer l'insertion en BDD
             if (empty($upload['error'])) {
                 $fileName = $upload['filename'];

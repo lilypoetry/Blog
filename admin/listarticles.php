@@ -6,7 +6,7 @@ require_once '../connexion.php';
 // Chargement des dépendances Composer
 require_once '../vendor/autoload.php';
 
-$query = $db->query('SELECT users.id, posts.title, posts.created_at FROM posts INNER JOIN users ON users.id = user_id ORDER BY users.id ASC;');
+$query = $db->query('SELECT posts.id, posts.title, posts.created_at FROM posts INNER JOIN users ON users.id = user_id ORDER BY users.id ASC;');
 
 $listArticles = $query->fetchAll();
 
@@ -101,10 +101,10 @@ $listArticles = $query->fetchAll();
                             <a href="delete.php" type="button" class="btn btn-outline-danger">Suprimer</a>
                         </td>  
                         <td class="m-auto">
-                            <a href="edit.php" type="button" class="btn btn-outline-primary">Editer</a>
+                            <a href="edit.php?id=<?php echo $detail['id']; ?>" type="button" class="btn btn-outline-primary">Editer</a>
                         </td>                                       
                     </tr>
-                <?php endforeach ?> 
+                <?php endforeach; ?> 
             </tbody>  
         </table>  
     </div>

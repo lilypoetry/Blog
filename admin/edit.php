@@ -14,14 +14,87 @@ $categories = $query->fetchAll();
 // dump($categories);
 
 /**
+ * Seléctionner l'article en BDD selon l'ID reçue par l'URL
+ */
+$id = htmlspecialchars(strip_tags($_GET['id']));
+
+$query = $db->prepare('SELECT id, title, content, cover, category_id FROM posts WHERE id = :id;');
+$query->bindValue(':id', $id, PDO::PARAM_INT);
+$query->execute();
+
+$article = $query->fetch();
+dump($article);
+
+$title = $article['title'];
+$content = $article['content'];
+$category = $article['category_id'];
+$error = null;
+
+// Code pour fonctionner le button "Enregistrer" la modification
+/**
+ * Si la superglobale $_POST n'est pas vide, alors j'effectue
+ * les vérifications nécessaires et l'insertion en BDD
+ */
+if (!empty($_POST)) {
+    // Nettoyage des données
+    $title = htmlspecialchars(strip_tags($_POST['title']));
+    $content = htmlspecialchars(strip_tags($_POST['content']));
+    $category = htmlspecialchars(strip_tags($_POST['category']));
+
+        // Vérifie que mes champs soient bien remplis
+        if (
+            !empty($title)
+            && !empty($content)
+            && !empty($category)
+        ) {
+
+            // Est-ce que je reçois une image ?
+            if (!empty($_FILES['cover']) && $_FILES['cover']['error'] === 0){
+                // Supression de l'ancienne image et upload de la nouvelle image
+                
+                    // Upload l'image sur le serveur
+                    require_once 'inc/fonction.php';
+                    $upload = uploadPicture($_FILES['cover'], '../images/upload', 1);
+
+                    // Si la variable $upload ne contient pa "erreur", 
+                    // alors on peut effectuer l'insertion en BDD
+                    if (empty($upload['error'])) {
+                        $fileName = $upload['filename'];
+                        
+                        // Insertion en BDD
+                        // Temporarement on donne user_id = 1;
+                        $query = $db->prepare('INSERT INTO posts (user_id, category_id, title, content, cover, created_at) VALUES (1, :category_id, :title, :content, :cover, NOW())');
+
+                        $query->bindValue(':category_id', $idCategory, PDO::PARAM_INT);
+                        $query->bindValue(':title', $title);
+                        $query->bindValue(':content', $content);
+                        $query->bindValue(':cover', $fileName);
+                        $query->execute();
+
+                        // Redirection vers la page d'accueil de l'administration
+                        header('Location: admin.php?succesAdd=1');    
+                    }
+                    else {
+                        // Sinon, on transfère l'eereur à la variable "error" pour l'afficher
+                        // au dessus du formulaire
+                        $error = $upload['error'];
+                    }
+            }
+            // Mise à jour des données en table "posts"
+            
+            
+        }
+        else {            
+            $error = 'Le titre, le contenu et la catégorie sont obligatoires';
+        }
+}
+
+/**
  * Déclaration de variable à NULL.
  * Elles serviront à remplir le formulaire des données soumies
  * par l'utilisateur.
- */
-$title = null;
-$content = null;
-$category = null;
-$error = null;
+*/
+
 
 ?>
 
@@ -40,7 +113,7 @@ $error = null;
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
         <!-- Placer sa feuille de style CSS en dernière position -->
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="../css/style.css">
     </head>
     <body>
         <header class="bg-dark py-4">
@@ -103,7 +176,7 @@ $error = null;
                             <div class="form-group py-3">
                                 <label for="category" class="form-label">Categories</label>
                                 <select class="form-control" id="category" name="category">                       
-                                    <option>Choisir une catégorie</option> 
+                                    <option value="">Choisir une catégorie</option> 
 
                                         <!-- Liste des catégories -->
                                         <?php foreach($categories as $categorie): ?>                
