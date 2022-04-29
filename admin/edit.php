@@ -28,6 +28,7 @@ dump($article);
 $title = $article['title'];
 $content = $article['content'];
 $category = $article['category_id'];
+$cover = $article['cover'];
 $error = null;
 
 // Code pour fonctionner le button "Enregistrer" la modification
@@ -49,39 +50,35 @@ if (!empty($_POST)) {
         ) {
 
             // Est-ce que je reçois une image ?
-            if (!empty($_FILES['cover']) && $_FILES['cover']['error'] === 0){
+            if (!empty($_FILES['cover']) && $_FILES['cover']['error'] === 0) 
+            {
                 // Supression de l'ancienne image et upload de la nouvelle image
-                
+                unlink("../images/upload/{$article['cover']}");
+
                     // Upload l'image sur le serveur
                     require_once 'inc/fonction.php';
                     $upload = uploadPicture($_FILES['cover'], '../images/upload', 1);
-
-                    // Si la variable $upload ne contient pa "erreur", 
-                    // alors on peut effectuer l'insertion en BDD
-                    if (empty($upload['error'])) {
-                        $fileName = $upload['filename'];
-                        
-                        // Insertion en BDD
-                        // Temporarement on donne user_id = 1;
-                        $query = $db->prepare('INSERT INTO posts (user_id, category_id, title, content, cover, created_at) VALUES (1, :category_id, :title, :content, :cover, NOW())');
-
-                        $query->bindValue(':category_id', $idCategory, PDO::PARAM_INT);
-                        $query->bindValue(':title', $title);
-                        $query->bindValue(':content', $content);
-                        $query->bindValue(':cover', $fileName);
-                        $query->execute();
-
-                        // Redirection vers la page d'accueil de l'administration
-                        header('Location: admin.php?succesAdd=1');    
+                    dump($upload); // pour verifier les erreurs
+                    
+                    // Si je reçois une ereur lors de l'upload, je retourne l'erreur
+                    // à ma variable "$error" afin de l'afficher au dessus du formulaire
+                    if (!empty($upload['error'])) {
+                        $error = $upload['error'];                    
                     }
                     else {
-                        // Sinon, on transfère l'eereur à la variable "error" pour l'afficher
-                        // au dessus du formulaire
-                        $error = $upload['error'];
+                        $cover = $upload['filename'];
                     }
             }
-            // Mise à jour des données en table "posts"
-            
+            // Miss à jour en BD si la variable "error" est égale à NULL
+            if ($error === null) {
+                $query = $db->prepare('UPDATE posts SET title = :title, content = :content, cover = :cover, category_id = :category WHERE id = :id');
+                $query->bindValue(':title', $title);
+                $query->bindValue(':content', $content);
+                $query->bindValue(':cover', $cover);
+                $query->bindValue(':category', $category, PDO::PARAM_INT);
+                $query->bindValue(':id', $id, PDO::PARAM_INT);
+                $query->execute();
+            }
             
         }
         else {            
@@ -216,7 +213,7 @@ if (!empty($_POST)) {
                             </div>
                         </div>
                         <div class="col-2 py-5">
-                            <img src="../images/upload/01.jpg" alt="Mon image" class="img-fluid rounded 50%">
+                            <img src="../images/upload/<?php echo $cover; ?>" alt="<?php echo $cover; ?>" class="img-fluid rounded 50%">
                         </div>
                     </div>
                     <button class="btn btn-primary">Enregistrer</button>                    

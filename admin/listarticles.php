@@ -6,7 +6,7 @@ require_once '../connexion.php';
 // Chargement des dépendances Composer
 require_once '../vendor/autoload.php';
 
-$query = $db->query('SELECT posts.id, posts.title, posts.created_at FROM posts INNER JOIN users ON users.id = user_id ORDER BY users.id ASC;');
+$query = $db->query('SELECT posts.id, posts.title, categories.id AS category_id, categories.name, posts.created_at FROM posts INNER JOIN users ON users.id = user_id INNER JOIN categories ON categories.id = category_id ORDER BY created_at DESC;');
 
 $listArticles = $query->fetchAll();
 
@@ -29,7 +29,7 @@ $listArticles = $query->fetchAll();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
     <!-- Placer sa feuille de style CSS en dernière position -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
     </head>
     <body>
     <header class="bg-dark py-4">
@@ -87,18 +87,20 @@ $listArticles = $query->fetchAll();
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Titre</th>
+                    <th scope="col">Categorie</th>
                     <th scope="col">Date</th> 
                     <th colspan="2">Update</th>           
                 </tr>
             </thead>
             <tbody>
                 <?php foreach($listArticles as $detail): ?>
-                    <tr>                    
+                    <tr class="text-center">                    
                         <th scope="row"><?php echo $detail['id']; ?></th>                    
                         <td><?php echo $detail['title']; ?></td>
+                        <td><?php echo $detail['name']; ?></td>
                         <td><?php echo $detail['created_at']; ?></td>
                         <td class="m-auto">
-                            <a href="delete.php" type="button" class="btn btn-outline-danger">Suprimer</a>
+                            <a type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confDelete">Suprimer</a>
                         </td>  
                         <td class="m-auto">
                             <a href="edit.php?id=<?php echo $detail['id']; ?>" type="button" class="btn btn-outline-primary">Editer</a>
@@ -107,6 +109,29 @@ $listArticles = $query->fetchAll();
                 <?php endforeach; ?> 
             </tbody>  
         </table>  
+
+        <!-- Confirmation de suppression -->
+            
+        <!-- Modal -->
+        <div class="modal fade" id="confDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Êtes vous sure de suprimer cette article ?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary">Sauvegarder</button>
+            </div>
+            </div>
+        </div>
+        </div>
+
+
     </div>
 
     <footer class="bg-dark py-4">

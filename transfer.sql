@@ -65,3 +65,15 @@ $query->execute();
 $categories = $query->fetchAll();
 
 dump($categories);
+
+// listarticles.php
+SELECT posts.id, posts.title, categories.id AS category_id, categories.name, posts.created_at 
+FROM posts 
+INNER JOIN users ON users.id = user_id 
+INNER JOIN categories ON categories.id = category_id 
+ORDER BY users.id ASC;
+
+// edit.php
+UPDATE posts 
+SET title = :title, content = :content, cover = :cover, category_id = :category 
+WHERE id = :id

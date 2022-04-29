@@ -55,14 +55,14 @@ if (!empty($_POST)) {
                 // Temporarement on donne user_id = 1;
                 $query = $db->prepare('INSERT INTO posts (user_id, category_id, title, content, cover, created_at) VALUES (1, :category_id, :title, :content, :cover, NOW())');
 
-                $query->bindValue(':category_id', $idCategory, PDO::PARAM_INT);
+                $query->bindValue(':category_id', $category, PDO::PARAM_INT);
                 $query->bindValue(':title', $title);
                 $query->bindValue(':content', $content);
                 $query->bindValue(':cover', $fileName);
                 $query->execute();
 
                 // Redirection vers la page d'accueil de l'administration
-                header('Location: admin.php?succesAdd=1');    
+                header('Location: listarticles.php?succesAdd=1');    
             }
             else {
                 // Sinon, on transfère l'eereur à la variable "error" pour l'afficher
@@ -74,6 +74,7 @@ if (!empty($_POST)) {
             $error = 'Tous les champs sont obligatoires';
         }
 }
+
 
 ?>
 
