@@ -1,33 +1,32 @@
 <?php
-   
-   // Connexion à la BDD
-   require_once 'connexion.php';
 
-   // Chargement des dépendances Composer
-   require_once 'vendor/autoload.php';
+// Connexion à la BDD
+require_once 'connexion.php';
 
-    /** 
-     * "category_id" correspond au nom de la variabledans l'URL :
-     * "categorie.php?catagory_id=?"
-     */
-    // dump($_GET['category_id']);
+// Chargement des dépendances Composer
+require_once 'vendor/autoload.php';
 
-    $idCategory = htmlspecialchars(strip_tags($_GET['category_id']));    
+/**
+ * "category_id" correspond au nom de variable dans l'URL :
+ * "categorie.php?category_id=?"
+ */
+//dump($_GET['category_id']);
 
-    $query = $db->prepare('SELECT posts.id, posts.title, posts.content, posts.cover, posts.created_at, posts.category_id, categories.name AS category FROM posts INNER JOIN categories ON categories.id = posts.category_id WHERE categories.id = :category_id ORDER BY categories.name ASC');
+$idCategory = htmlspecialchars(strip_tags($_GET['category_id']));
 
-    $query->bindValue(':category_id', $idCategory, PDO::PARAM_INT);
-    $query->execute();
+$query = $db->prepare('SELECT posts.id, posts.title, posts.content, posts.cover, posts.created_at, posts.category_id, categories.name AS category FROM posts INNER JOIN categories ON categories.id = posts.category_id WHERE posts.category_id = :category_id ORDER BY posts.created_at DESC');
+$query->bindValue(':category_id', $idCategory, PDO::PARAM_INT);
+$query->execute();
 
-    $articles = $query->fetchAll();
-    // dump($articles);
+$articles = $query->fetchAll();
+// dump($articles);
 
-    if (!$articles) {
-        // ... redirection vers une page 404
-        header('Location: 404.php');
-    }
+// Erreur 404
+if (!$articles) {
+    header('Location: 404.php');
+}
+
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -46,14 +45,14 @@
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <header class="bg-dark py-4">
+    <header class="bg-dark py-4">
             <div class="container">
 
                 <!-- Ligne -->
                 <div class="row">
                     <!-- Titre du site -->
                     <div class="col-6 col-lg-12 text-start text-lg-center">
-                        <a href="#" title="Philo..." class="text-white text-decoration-none h1 logo">
+                        <a href="index.php" title="Philo..." class="text-white text-decoration-none h1 logo">
                             Philosophy.
                         </a>
                     </div>
@@ -68,9 +67,9 @@
                     <!-- Navigation -->
                     <div class="col-12 d-none d-lg-block">
                         <nav>
-                            <ul class="d-flex align-items-center justify-content-center gap-5 py-3">
-                                <li><a href="index.php" title="Home" class="text-secondary text-decoration-none">Home</a></li>
-                                <li><a href="categories.php" title="Categories" class="text-secondary text-decoration-none">Categories</a></li>
+                            <ul class="d-flex align-items-center justify-content-center gap-5 pt-3 m-0">
+                                <li><a href="index.html" title="Home" class="text-secondary text-decoration-none">Home</a></li>
+                                <li><a href="#" title="Categories" class="text-secondary text-decoration-none">Categories</a></li>
                                 <li><a href="#" title="Styles" class="text-secondary text-decoration-none">Styles</a></li>
                                 <li><a href="#" title="About" class="text-secondary text-decoration-none">About</a></li>
                                 <li><a href="#" title="Contact" class="text-secondary text-decoration-none">Contact</a></li>

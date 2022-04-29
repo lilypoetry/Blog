@@ -130,7 +130,7 @@
                             </div>
                         </article>
                     </div>
-                <?php endforeach ?>
+                <?php endforeach; ?>
  
                 </div>
             </div>

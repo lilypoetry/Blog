@@ -23,11 +23,6 @@ $content = null;
 $category = null;
 $error = null;
 
-
-
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -55,8 +50,8 @@ $error = null;
                 <div class="row">
                     <!-- Titre du site -->
                     <div class="col-6 col-lg-12 text-start text-lg-center">
-                        <a href="#" title="Philo..." class="text-white text-decoration-none h1 logo">
-                            Administrator Philosophy. 
+                        <a href="index.php" title="Philo..." class="text-white text-decoration-none h1 logo">
+                            Philosophy. <span class="text-danger fs-4">Administration</span>
                         </a>
                     </div>
 
@@ -71,8 +66,8 @@ $error = null;
                     <div class="col-12 d-none d-lg-block">
                         <nav>
                             <ul class="d-flex align-items-center justify-content-center gap-5 pt-3 m-0">
-                                <li><a href="index.php" title="Home" class="text-secondary text-decoration-none">Home</a></li>
-                                <li><a href="#" title="Categories" class="text-secondary text-decoration-none">Categories</a></li>
+                                <li><a href="../index.php" title="Home" class="text-secondary text-decoration-none">Aller sur le blog</a></li>
+                                <li><a href="index.php" title="Home" class="text-secondary text-decoration-none">Articles</a></li>
                             </ul>
                         </nav>
                     </div>

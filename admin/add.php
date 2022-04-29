@@ -24,10 +24,11 @@ $category = null;
 $error = null;
 
 /**
- * Si la superglobale $_POST n'est pas vide, alors j'effectue les
- * vérifications nécessaire et l'insertion en BDD
+ * Si la superglobale $_POST n'est pas vide, alors j'effectue
+ * les vérifications nécessaires et l'insertion en BDD
  */
 if (!empty($_POST)) {
+    // Nettoyage des données
     $title = htmlspecialchars(strip_tags($_POST['title']));
     $content = htmlspecialchars(strip_tags($_POST['content']));
     $category = htmlspecialchars(strip_tags($_POST['category']));
@@ -91,18 +92,18 @@ if (!empty($_POST)) {
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         
         <!-- Placer sa feuille de style CSS en dernière position -->
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="../css/style.css">
     </head>
     <body>
-        <header class="bg-dark py-4">
+    <header class="bg-dark py-4">
             <div class="container">
 
                 <!-- Ligne -->
                 <div class="row">
                     <!-- Titre du site -->
                     <div class="col-6 col-lg-12 text-start text-lg-center">
-                        <a href="#" title="Philo..." class="text-white text-decoration-none h1 logo">
-                            Philosophy. 
+                        <a href="index.php" title="Philo..." class="text-white text-decoration-none h1 logo">
+                            Philosophy. <span class="text-danger fs-4">Administration</span>
                         </a>
                     </div>
 

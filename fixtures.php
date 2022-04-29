@@ -47,6 +47,16 @@ for ($i = 0; $i < 20; $i++) {
     $query = $db->prepare('INSERT INTO users (lastname, firstname, email, password, role, created_at) VALUES (:lastname, :firstname, :email, :password, :role, :created_at)');
     $query->bindValue(':lastname', $faker->lastName);
     $query->bindValue(':firstname', $faker->firstName);
+    $query->bindValue(':email', $faker->unique()->email); // Permet une valeur unique
+    $query->bindValue(':password', password_hash('secret', PASSWORD_ARGON2I));
+    $query->bindValue(':role', $i === 0 ? 'ROLE_ADMIN' : 'ROLE_USER');
+    $query->bindValue(':created_at', $createdAt->format('Y-m-d'));
+    $query->execute();
+}
+
+    $query = $db->prepare('INSERT INTO users (lastname, firstname, email, password, role, created_at) VALUES (:lastname, :firstname, :email, :password, :role, :created_at)');
+    $query->bindValue(':lastname', $faker->lastName);
+    $query->bindValue(':firstname', $faker->firstName);
     $query->bindValue(':email', $faker->email);
     $query->bindValue(':password', password_hash('secret', PASSWORD_ARGON2I));
     $query->bindValue(':role', $i === 0 ? 'ROLE_ADMIN' : 'ROLE-USER');

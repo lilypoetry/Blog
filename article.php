@@ -40,7 +40,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Philosophy. - <?php ?>$article['title']</title>
+        <title>Philosophy. - <?php $article['title']; ?></title>
 
         <!-- JavaScript Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -59,8 +59,8 @@
                 <div class="row">
                     <!-- Titre du site -->
                     <div class="col-6 col-lg-12 text-start text-lg-center">
-                        <a href="#" title="Philo..." class="text-white text-decoration-none h1 logo">
-                            Philosophy. 
+                        <a href="index.php" title="Philo..." class="text-white text-decoration-none h1 logo">
+                            Philosophy.
                         </a>
                     </div>
 
