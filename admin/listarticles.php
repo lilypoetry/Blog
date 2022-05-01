@@ -16,128 +16,134 @@ $listArticles = $query->fetchAll();
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admin</title>
 
-     <!-- JavaScript Bundle with Popper -->
-     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <!-- JavaScript Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <script src="../js/delete.js" defer></script>
 
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <!-- CSS only -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-    <!-- Placer sa feuille de style CSS en dernière position -->
-    <link rel="stylesheet" href="../css/style.css">
+        <!-- Placer sa feuille de style CSS en dernière position -->
+        <link rel="stylesheet" href="../css/style.css">
     </head>
     <body>
-    <header class="bg-dark py-4">
-        <div class="container">
+        <header class="bg-dark py-4">
+            <div class="container">
 
-            <!-- Ligne -->
-            <div class="row">
-                <!-- Titre du site -->
-                <div class="col-6 col-lg-12 text-start text-lg-center">
-                    <a href="#" title="Philo..." class="text-white text-decoration-none h1 logo">
-                        Administration Philosophy. 
-                    </a>
-                </div>
+                <!-- Ligne -->
+                <div class="row">
+                    <!-- Titre du site -->
+                    <div class="col-6 col-lg-12 text-start text-lg-center">
+                        <a href="#" title="Philo..." class="text-white text-decoration-none h1 logo">
+                            Administration Philosophy. 
+                        </a>
+                    </div>
 
-                <!-- Menu burger -->
-                <div class="col-6 d-block d-lg-none text-end">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-list text-white" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
-                    </svg>
-                </div>
+                    <!-- Menu burger -->
+                    <div class="col-6 d-block d-lg-none text-end">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-list text-white" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                        </svg>
+                    </div>
 
-                <!-- Navigation -->
-                <div class="col-12 d-none d-lg-block">
-                    <nav>
-                        <ul class="d-flex align-items-center justify-content-center gap-5 pt-3 m-0">
-                            <li><a href="index.php" title="Home" class="text-secondary text-decoration-none">Home</a></li>
-                            <li><a href="categories.php" title="Categories" class="text-secondary text-decoration-none">Categories</a></li>
-                            <li><a href="#" title="Styles" class="text-secondary text-decoration-none">Styles</a></li>
-                            <li><a href="#" title="About" class="text-secondary text-decoration-none">About</a></li>
-                            <li><a href="#" title="Contact" class="text-secondary text-decoration-none">Contact</a></li>
-                        </ul>
-                    </nav>
+                    <!-- Navigation -->
+                    <div class="col-12 d-none d-lg-block">
+                        <nav>
+                            <ul class="d-flex align-items-center justify-content-center gap-5 pt-3 m-0">
+                                <li><a href="../index.php" title="Home" class="text-secondary text-decoration-none">Home</a></li>
+                                <li><a href="listarticles.php" title="Categories" class="text-secondary text-decoration-none">Articles</a></li>                            
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </div>
-        </div>
-    </header>
-    <div class="gradient"></div>
-</head>
-<body>
-    <div class="container">
-        <h3 class="py-3">Gestion des articles</h3>
-    
-        <p class="text-end">
-            <a href="../admin/add.php" type="button" class="btn btn-primary">Ajouter</a>
-        </p>
+        </header>
+        <div class="gradient"></div>
 
-        <?php if (isset($_GET['successAdd'])): ?>
-            <div class="alert alert-success mb-4">
-                L'article à bien été ajouté !
+        <main>
+            <div class="container">
+                <div class="row pt-5 pb-3">
+                    <div class="col">
+                        <h3 class="">Gestion des articles</h3>
+                    </div>
+                    <div class="col text-end">
+                        <p class="text-end ">
+                            <a href="../admin/add.php" type="button" class="btn btn-outline-primary">Ajouter</a>
+                        </p>                
+                    </div>
+                </div>
+
+                <?php if (isset($_GET['successAdd'])): ?>
+                    <div class="alert alert-success mb-4">
+                        L'article à bien été ajouté !
+                    </div>
+                <?php endif; ?>
+
+                <?php if(isset($_GET['successDelete'])): ?>
+                    <div class="alert alert-success mb-4">
+                        L'article à bien été supprimé !
+                    </div>
+				<?php endif; ?>
+
+                <table class="table table-hover">
+                    <thead class="bg-dark text-white text-center">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Titre</th>
+                            <th scope="col">Categorie</th>
+                            <th scope="col">Date</th> 
+                            <th colspan="2">Update</th>           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($listArticles as $detail): ?>
+                            <tr class="text-center">                    
+                                <th scope="row"><?php echo $detail['id']; ?></th>                    
+                                <td><?php echo $detail['title']; ?></td>
+                                <td><?php echo $detail['name']; ?></td>
+                                <td><?php echo $detail['created_at']; ?></td>
+                                <td class="m-auto">
+                                    <a href="delete.php?id=<?php echo $detail['id']; ?>" type="button" title="delete" class="btn btn-outline-danger btnDelete" data-bs-toggle="modal" data-bs-target="#confDelete">Supprimer</a>
+                                </td>  
+                                <td class="m-auto">
+                                    <a href="edit.php?id=<?php echo $detail['id']; ?>" type="button" class="btn btn-outline-primary">Editer</a>
+                                </td>                                       
+                            </tr>
+                        <?php endforeach; ?> 
+                    </tbody>  
+                </table>  
+
+                <!-- Confirmation de suppression -->
+                    
+                <!-- Modal -->
+                <div class="modal fade" id="confDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Êtes vous sûr de suprimer cette article ?</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                <a href="#" class="btn btn-danger btnDeleteModal">Oui</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        <?php endif; ?>
-
-        <table class="table table-hover">
-            <thead class="bg-dark text-white text-center">
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Titre</th>
-                    <th scope="col">Categorie</th>
-                    <th scope="col">Date</th> 
-                    <th colspan="2">Update</th>           
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach($listArticles as $detail): ?>
-                    <tr class="text-center">                    
-                        <th scope="row"><?php echo $detail['id']; ?></th>                    
-                        <td><?php echo $detail['title']; ?></td>
-                        <td><?php echo $detail['name']; ?></td>
-                        <td><?php echo $detail['created_at']; ?></td>
-                        <td class="m-auto">
-                            <a type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confDelete">Suprimer</a>
-                        </td>  
-                        <td class="m-auto">
-                            <a href="edit.php?id=<?php echo $detail['id']; ?>" type="button" class="btn btn-outline-primary">Editer</a>
-                        </td>                                       
-                    </tr>
-                <?php endforeach; ?> 
-            </tbody>  
-        </table>  
-
-        <!-- Confirmation de suppression -->
-            
-        <!-- Modal -->
-        <div class="modal fade" id="confDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Êtes vous sure de suprimer cette article ?</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                <button type="button" class="btn btn-primary">Sauvegarder</button>
-            </div>
-            </div>
-        </div>
-        </div>
-
-
-    </div>
-
+        </main>
     <footer class="bg-dark py-4">
             <div class="container">
                 <p class="m-0 text-white">&copy; Copyright Philosophy 2022</p>
             </div>
     </footer>
+    
 </body>
 </html>

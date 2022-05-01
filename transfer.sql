@@ -77,3 +77,6 @@ ORDER BY users.id ASC;
 UPDATE posts 
 SET title = :title, content = :content, cover = :cover, category_id = :category 
 WHERE id = :id
+
+// delete.php
+DELETE FROM posts WHERE id = :id;

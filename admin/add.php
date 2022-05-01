@@ -62,7 +62,7 @@ if (!empty($_POST)) {
                 $query->execute();
 
                 // Redirection vers la page d'accueil de l'administration
-                header('Location: listarticles.php?succesAdd=1');    
+                header('Location: listarticles.php?successAdd=1');    
             }
             else {
                 // Sinon, on transfère l'eereur à la variable "error" pour l'afficher
@@ -119,7 +119,7 @@ if (!empty($_POST)) {
                     <div class="col-12 d-none d-lg-block">
                         <nav>
                             <ul class="d-flex align-items-center justify-content-center gap-5 pt-3 m-0">
-                                <li><a href="index.php" title="Home" class="text-secondary text-decoration-none">Home</a></li>
+                                <li><a href="../index.php" title="Home" class="text-secondary text-decoration-none">Home</a></li>
                                 <li><a href="categories.php" title="Categories" class="text-secondary text-decoration-none">Categories</a></li>
                                 <li><a href="#" title="Styles" class="text-secondary text-decoration-none">Styles</a></li>
                                 <li><a href="#" title="About" class="text-secondary text-decoration-none">About</a></li>

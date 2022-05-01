@@ -30,7 +30,7 @@
         header('Location: 404.php');
     }
 
-    // dump($article);
+     dump($article);
     
 ?>
 
@@ -101,9 +101,9 @@
                         </div>
                         <div class="col-12 col-lg-1">
                             <div class="d-flex align-items-center gap-2">
-                                <a href="categories.php?posts.category_id=" title="<?php echo $article['category']; ?>" class="badge rounded-pill bg-primary text-decoration-none">
+                                <a href="categories.php?category_id=<?php echo $article['category_id']; ?>" title="<?php echo $article['category']; ?>" class="badge rounded-pill bg-primary text-decoration-none">
                                     <?php echo $article['category']; ?>
-                                </a>                            
+                                </a>                           
                             </div>
                         </div>
                         <div class="col-12 col-lg-4 text-lg-start">
@@ -117,10 +117,8 @@
                             <p><?php echo $article['content']; ?> </p>    
                         </div>
                     </div>
-                </article>
-                
-            </div>
-            
+                </article>                
+            </div>            
 
             <div class="container-fluid bg-light mt-5">
                 <div class="row justify-content-center">
@@ -158,8 +156,7 @@
                             <div class="col-12 pt-2 pb-5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit id recusandae ex sit, amet, ad nemo vitae, fugit voluptas ducimus facere reiciendis neque. Expedita modi sunt, quas praesentium alias delectus?</div>
                         </div>
                     </div>
-                </div>
-            
+                </div>            
 
                 <div class="row justify-content-center">
                     <div class="col-12 col-lg-6 pb-5">

@@ -23,7 +23,7 @@ $query->bindValue(':id', $id, PDO::PARAM_INT);
 $query->execute();
 
 $article = $query->fetch();
-dump($article);
+// dump($article);
 
 $title = $article['title'];
 $content = $article['content'];
@@ -136,8 +136,8 @@ if (!empty($_POST)) {
                     <div class="col-12 d-none d-lg-block">
                         <nav>
                             <ul class="d-flex align-items-center justify-content-center gap-5 pt-3 m-0">
-                                <li><a href="../index.php" title="Home" class="text-secondary text-decoration-none">Aller sur le blog</a></li>
-                                <li><a href="index.php" title="Home" class="text-secondary text-decoration-none">Articles</a></li>
+                                <li><a href="../index.php" title="Home" class="text-secondary text-decoration-none">Home</a></li>
+                                <li><a href="listarticles.php" title="Home" class="text-secondary text-decoration-none">Articles</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -204,7 +204,7 @@ if (!empty($_POST)) {
                         
                     </div>
                     <div class="row">
-                        <div class="col-10">
+                        <div class="col-9">
                             <div class="form-group py-3">
                                 <label for="content" class="form-label">Content</label>
                                 <textarea class="form-control" name="content" id="content" rows="10">
@@ -212,7 +212,7 @@ if (!empty($_POST)) {
                                 </textarea>                
                             </div>
                         </div>
-                        <div class="col-2 py-5">
+                        <div class="col-3 py-5">
                             <img src="../images/upload/<?php echo $cover; ?>" alt="<?php echo $cover; ?>" class="img-fluid rounded 50%">
                         </div>
                     </div>

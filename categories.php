@@ -68,11 +68,12 @@ if (!$articles) {
                     <div class="col-12 d-none d-lg-block">
                         <nav>
                             <ul class="d-flex align-items-center justify-content-center gap-5 pt-3 m-0">
-                                <li><a href="index.html" title="Home" class="text-secondary text-decoration-none">Home</a></li>
-                                <li><a href="#" title="Categories" class="text-secondary text-decoration-none">Categories</a></li>
+                                <li><a href="index.php" title="Home" class="text-secondary text-decoration-none">Home</a></li>
+                                <li><a href="categories.php" title="Categories" class="text-secondary text-decoration-none">Categories</a></li>
                                 <li><a href="#" title="Styles" class="text-secondary text-decoration-none">Styles</a></li>
                                 <li><a href="#" title="About" class="text-secondary text-decoration-none">About</a></li>
                                 <li><a href="#" title="Contact" class="text-secondary text-decoration-none">Contact</a></li>
+                                <li><a href="../admin/listarticles.php" title="Contact" class="text-secondary text-decoration-none">Log in</a></li>
                             </ul>
                         </nav>
                     </div>
