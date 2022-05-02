@@ -9,7 +9,7 @@ const btnDelete = document.querySelectorAll('.btnDelete');
 btnDelete.forEach(btn => 
 {
     // Ecouteur d'évènement sur le bouton au click
-    btnDelete.addEventListener('click', (event) => 
+    btn.addEventListener('click', (event) => 
     {
         event.preventDefault();
 
@@ -17,7 +17,7 @@ btnDelete.forEach(btn =>
         const href = btn.href;
         const modalDelete = document.querySelector('.btnDeleteModal');
         modalDelete.href = href;
-        
+        console.log('bvsguh');
         // Récupération de la modal 'copy from Bootstrap'
         // var myModal = new bootstrap.Modal(document.getElementById('confDelete'), options)
         const myModal = new bootstrap.Modal(document.querySelector('#confDelete'));

@@ -80,3 +80,6 @@ WHERE id = :id
 
 // delete.php
 DELETE FROM posts WHERE id = :id;
+
+// login.php
+SELECT * FROM users WHERE users.id = :id;

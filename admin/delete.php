@@ -1,5 +1,18 @@
 <?php
 
+session_start();
+
+if(!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'ROLE_ADMIN')
+{
+    // Redirection vers le formulaire de connexion
+    header('Location: ../login.php');
+}
+// Connexion à la BDD
+require_once '../connexion.php';
+
+// Chargement des dépendances Composer
+require_once '../vendor/autoload.php';
+
 /**
  * Supprime un article
  */
@@ -24,5 +37,5 @@ if ($query->rowCount() === 0) {
 }
 else {
 	// Redirection vers la page d'accueil de l'admin en cas de succès
-	header('Location: listarticles.php?successDelete=1');
+	header('Location: index.php?successDelete=1');
 }

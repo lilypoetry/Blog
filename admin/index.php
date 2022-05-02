@@ -1,5 +1,8 @@
 <?php
 
+// Verifier si l'access Admin
+require_once 'checkAdmin.php';
+
 // Connexion à la BDD
 require_once '../connexion.php';
 
@@ -8,6 +11,7 @@ require_once '../vendor/autoload.php';
 
 $query = $db->query('SELECT posts.id, posts.title, categories.id AS category_id, categories.name, posts.created_at FROM posts INNER JOIN users ON users.id = user_id INNER JOIN categories ON categories.id = category_id ORDER BY created_at DESC;');
 
+// Recupère tous les résultats et je les stocke dans la variable "$listeArticles"
 $listArticles = $query->fetchAll();
 
 // dump($listArticles);
@@ -41,7 +45,7 @@ $listArticles = $query->fetchAll();
                     <!-- Titre du site -->
                     <div class="col-6 col-lg-12 text-start text-lg-center">
                         <a href="#" title="Philo..." class="text-white text-decoration-none h1 logo">
-                            Administration Philosophy. 
+                            Philosophy. <span class="text-danger fs-4">Administration</span>
                         </a>
                     </div>
 
@@ -57,7 +61,7 @@ $listArticles = $query->fetchAll();
                         <nav>
                             <ul class="d-flex align-items-center justify-content-center gap-5 pt-3 m-0">
                                 <li><a href="../index.php" title="Home" class="text-secondary text-decoration-none">Home</a></li>
-                                <li><a href="listarticles.php" title="Categories" class="text-secondary text-decoration-none">Articles</a></li>                            
+                                <li><a href="index.php" title="Categories" class="text-secondary text-decoration-none">Articles</a></li>                            
                             </ul>
                         </nav>
                     </div>
@@ -74,7 +78,9 @@ $listArticles = $query->fetchAll();
                     </div>
                     <div class="col text-end">
                         <p class="text-end ">
-                            <a href="../admin/add.php" type="button" class="btn btn-outline-primary">Ajouter</a>
+                            <a href="../admin/add.php" type="button" class="btn btn-outline-primary">
+                                + article
+                            </a>
                         </p>                
                     </div>
                 </div>
@@ -92,22 +98,22 @@ $listArticles = $query->fetchAll();
 				<?php endif; ?>
 
                 <table class="table table-hover">
-                    <thead class="bg-dark text-white text-center">
+                    <thead class="bg-dark text-white ">
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">Titre</th>
                             <th scope="col">Categorie</th>
                             <th scope="col">Date</th> 
-                            <th colspan="2">Update</th>           
+                            <th colspan="2" class="text-center">Update</th>           
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach($listArticles as $detail): ?>
-                            <tr class="text-center">                    
+                            <tr class="text-start">                    
                                 <th scope="row"><?php echo $detail['id']; ?></th>                    
                                 <td><?php echo $detail['title']; ?></td>
                                 <td><?php echo $detail['name']; ?></td>
-                                <td><?php echo $detail['created_at']; ?></td>
+                                <td><?php echo date('d-F-Y', strtotime($detail['created_at'])); ?></td>
                                 <td class="m-auto">
                                     <a href="delete.php?id=<?php echo $detail['id']; ?>" type="button" title="delete" class="btn btn-outline-danger btnDelete" data-bs-toggle="modal" data-bs-target="#confDelete">Supprimer</a>
                                 </td>  

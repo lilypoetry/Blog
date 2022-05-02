@@ -1,10 +1,16 @@
 <?php
 
+    // Ouverture de la session
+    session_start();
+    
+
     // Connexion à la BDD
     require_once 'connexion.php';
 
     // Chargement des dépendances Composer
     require_once 'vendor/autoload.php';
+
+    // dump($_SESSION['user']);
 
     // Passe la requête SQL
     $query = $db->query('SELECT posts.id, posts.title, posts.content, posts.cover, posts.created_at, posts.category_id, categories.name AS category FROM posts INNER JOIN categories ON categories.id = posts.category_id ORDER BY posts.created_at DESC');
@@ -35,74 +41,21 @@
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <header class="bg-dark py-4">
-            <div class="container">
-
-                <!-- Ligne -->
-                <div class="row">
-                    <!-- Titre du site -->
-                    <div class="col-6 col-lg-12 text-start text-lg-center">
-                        <a href="#" title="Philo..." class="text-white text-decoration-none h1 logo">
-                            Philosophy.
-                        </a>
-                    </div>
-
-                    <!-- Menu burger -->
-                    <div class="col-6 d-block d-lg-none text-end">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-list text-white" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
-                        </svg>
-                    </div>
-
-                    <!-- Navigation -->
-                    <div class="col-12 d-none d-lg-block">
-                        <nav>
-                            <ul class="d-flex align-items-center justify-content-center gap-5 py-3">
-                                <li><a href="index.php" title="Home" class="text-secondary text-decoration-none">Home</a></li>
-                                <li><a href="categories.php" title="Categories" class="text-secondary text-decoration-none">Categories</a></li>
-                                <li><a href="#" title="Styles" class="text-secondary text-decoration-none">Styles</a></li>
-                                <li><a href="#" title="About" class="text-secondary text-decoration-none">About</a></li>
-                                <li><a href="#" title="Contact" class="text-secondary text-decoration-none">Contact</a></li>
-                                <li><a href="login.php" title="Log in" class="text-secondary text-decoration-none">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle text-white" viewBox="0 0 16 16">
-                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-                                    </svg>
-                                </a></li>
-                            </ul>
-                        </nav>
-                    </div>
-
-                    <!-- Carousel -->
-                    <div class="col-12">
-                        <div class="row d-flex align-items-center slider">
-                            <!-- Flèche de gauche -->
-                            <div class="col-lg-3 d-none d-lg-block text-end">                                
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-caret-left text-white" viewBox="0 0 16 16">
-                                    <path d="M10 12.796V3.204L4.519 8 10 12.796zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z"/>
-                                </svg>
-                            </div>
-
-                            <!-- Image du carousel -->
-                            <div class="col-12 col-lg-6 pt-4 pt-lg-0">
-                                <img src="images/slide/01.jpg" alt="Image du slide" class="w-100 rounded carousel-img">
-                            </div>
-
-                            <!-- Flèche de droite -->
-                            <div class="col-lg-3 d-none d-lg-block text-start">
-                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-caret-right text-white" viewBox="0 0 16 16">
-                                    <path d="M6 12.796V3.204L11.481 8 6 12.796zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753z"/>
-                                </svg>                               
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
-        <div class="gradient"></div>
+        <!-- Inclusion du header de la page -->
+        <?php require_once 'layouts/header.php'; ?>
 
         <main class="py-5">
             <div class="container">
+
+                <!-- Message de bienvenue à l'utilisateur connecté -->
+                <?php if (isset($_SESSION['user'])): ?>
+                    <div class="alert alert-success">
+                        Bonjour <?php echo $_SESSION['user']['firstname']; ?> <?php echo $_SESSION['user']['lastname']; ?> !                        
+                    </div>
+                <?php endif; ?>
+
+
+                <!-- Les articles du blog -->
                 <div class="row">
 
                 <?php foreach($articles as $article): ?>
@@ -122,7 +75,7 @@
                             <p class="text-secondary">                                                                
                                 <?php 
                                     $timestamp = strtotime($article['created_at']);
-                                    echo date('F d, Y', $timestamp); 
+                                    echo date('d F, Y', $timestamp); 
                                 ?>
                             </p>
 
@@ -142,11 +95,9 @@
                 </div>
             </div>
         </main>
+    
+        <!-- Inclusion footer de la page -->
+        <?php require_once 'layouts/footer.php'; ?>
 
-        <footer class="bg-dark py-4">
-            <div class="container">
-                <p class="m-0 text-white">&copy; Copyright Philosophy 2022</p>
-            </div>
-        </footer>
     </body>
 </html>

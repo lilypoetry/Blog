@@ -1,5 +1,12 @@
 <?php
 
+session_start();
+
+if(!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'ROLE_ADMIN')
+{
+    // Redirection vers le formulaire de connexion
+    header('Location: ../login.php');
+}
 // Connexion à la BDD
 require_once '../connexion.php';
 
@@ -18,7 +25,7 @@ $categories = $query->fetchAll();
  */
 $id = htmlspecialchars(strip_tags($_GET['id']));
 
-$query = $db->prepare('SELECT id, title, content, cover, category_id FROM posts WHERE id = :id;');
+$query = $db->prepare('SELECT id, title, content, cover, category_id FROM posts WHERE id = :id');
 $query->bindValue(':id', $id, PDO::PARAM_INT);
 $query->execute();
 
@@ -30,39 +37,38 @@ $content = $article['content'];
 $category = $article['category_id'];
 $cover = $article['cover'];
 $error = null;
+$sucess = false;
 
 // Code pour fonctionner le button "Enregistrer" la modification
 /**
  * Si la superglobale $_POST n'est pas vide, alors j'effectue
  * les vérifications nécessaires et l'insertion en BDD
  */
-if (!empty($_POST)) {
+if (!empty($_POST)) 
+{
     // Nettoyage des données
     $title = htmlspecialchars(strip_tags($_POST['title']));
     $content = htmlspecialchars(strip_tags($_POST['content']));
     $category = htmlspecialchars(strip_tags($_POST['category']));
 
         // Vérifie que mes champs soient bien remplis
-        if (
-            !empty($title)
-            && !empty($content)
-            && !empty($category)
-        ) {
-
+        if (!empty($title) && !empty($content) && !empty($category)) 
+        {
             // Est-ce que je reçois une image ?
             if (!empty($_FILES['cover']) && $_FILES['cover']['error'] === 0) 
             {
-                // Supression de l'ancienne image et upload de la nouvelle image
+                // Supression de l'ancienne image
                 unlink("../images/upload/{$article['cover']}");
 
-                    // Upload l'image sur le serveur
+                    // Upload de la nouvelle image sur le serveur
                     require_once 'inc/fonction.php';
                     $upload = uploadPicture($_FILES['cover'], '../images/upload', 1);
-                    dump($upload); // pour verifier les erreurs
+                    // dump($upload); // pour verifier les erreurs
                     
                     // Si je reçois une ereur lors de l'upload, je retourne l'erreur
                     // à ma variable "$error" afin de l'afficher au dessus du formulaire
-                    if (!empty($upload['error'])) {
+                    if (!empty($upload['error'])) 
+                    {
                         $error = $upload['error'];                    
                     }
                     else {
@@ -70,7 +76,8 @@ if (!empty($_POST)) {
                     }
             }
             // Miss à jour en BD si la variable "error" est égale à NULL
-            if ($error === null) {
+            if ($error === null) 
+            {
                 $query = $db->prepare('UPDATE posts SET title = :title, content = :content, cover = :cover, category_id = :category WHERE id = :id');
                 $query->bindValue(':title', $title);
                 $query->bindValue(':content', $content);
@@ -78,11 +85,13 @@ if (!empty($_POST)) {
                 $query->bindValue(':category', $category, PDO::PARAM_INT);
                 $query->bindValue(':id', $id, PDO::PARAM_INT);
                 $query->execute();
-            }
-            
+
+                $success = 'L\'article a bien été modifié !'
+            }            
         }
-        else {            
-            $error = 'Le titre, le contenu et la catégorie sont obligatoires';
+        else 
+        {            
+            $error = 'Le titre, le contenu et la catégorie sont obligatoires !';
         }
 }
 
@@ -154,14 +163,24 @@ if (!empty($_POST)) {
                     </div>
                 </div>                
                 
-                <!-- Affichage d'une erreur formulaire si nécessaire -->
-                <?php if($error !== null): ?>
-                        <div class="alert alert-danger">
-                            <?php echo $error; ?>
-                        </div> 
-                <?php endif; ?>
+                
 
                 <form method="post" enctype="multipart/form-data" class="py-4 w-60 mx-auto">
+                    
+                    <!-- Affichage message de succés si nécessaire -->
+                    <?php if($success): ?>
+                            <div class="alert alert-success">
+                                <?php echo $success; ?>
+                            </div> 
+                    <?php endif; ?>
+
+                    <!-- Affichage d'une erreur formulaire si nécessaire -->
+                    <?php if($error !== null): ?>
+                            <div class="alert alert-danger">
+                                <?php echo $error; ?>
+                            </div> 
+                    <?php endif; ?>
+
                     <div class="row">
                         <div class="col">
                             <div class="form-group pt-3">
@@ -213,10 +232,10 @@ if (!empty($_POST)) {
                             </div>
                         </div>
                         <div class="col-3 py-5">
-                            <img src="../images/upload/<?php echo $cover; ?>" alt="<?php echo $cover; ?>" class="img-fluid rounded 50%">
+                            <img src="../images/upload/<?php echo $cover; ?>" alt="cover" class="img-fluid rounded 50%">
                         </div>
                     </div>
-                    <button class="btn btn-primary">Enregistrer</button>                    
+                    <button class="btn btn-primary">Enregistrer les modifications</button>                    
                 </form>        
             </div>
         </main>

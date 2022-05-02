@@ -6,12 +6,31 @@ require_once '../connexion.php';
 // Chargement des dépendances Composer
 require_once '../vendor/autoload.php';
 
-$query = $db->query('SELECT posts.id, posts.title, categories.id AS category_id, categories.name, posts.created_at FROM posts INNER JOIN users ON users.id = user_id INNER JOIN categories ON categories.id = category_id ORDER BY created_at DESC;');
+// https://code.tutsplus.com/tutorials/create-a-php-login-form--cms-33261
 
-$listArticles = $query->fetchAll();
+$lastname = htmlspecialchars(strip_tags($_GET['lastname']));
+$firstname = htmlspecialchars(strip_tags($_GET['firstname']));
+$email = htmlspecialchars(strip_tags($_GET['email']));
+$password = htmlspecialchars(strip_tags($_GET['password']));
 
-// dump($listArticles);
+$query = $db->prepare('INSERT INTO users (lastname, firstname, email, password, role, created_at) VALUES (:lastname, :firstname, :email, :password, :role, NOW())');
 
+$query->bindValue(':lastname', $lastname);
+$query->bindValue(':firstname', $firstname);
+$query->bindValue(':email', $email, PDO::PARAM_STR);
+$query->bindValue(':password', $password, , PDO::PARAM_STR);
+
+$query->execute();
+
+$user = $query->fetch();
+
+dump($user);
+
+if ($result) {
+    echo '<p class="success">Your registration was successful!</p>';
+} else {
+    echo '<p class="error">Something went wrong!</p>';
+}
 ?>
 
 <!DOCTYPE html>

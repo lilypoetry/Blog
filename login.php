@@ -1,16 +1,85 @@
 <?php
 
+/**
+ * Connexion utilisateur
+ */
+
+ /**
+  * 1. Recupération des données du formulaire et nottoyage
+  * 2. Vérifier si l'email existe en BDD
+  *    2.1. Si oui, on virifie le mot de passe
+  *    2.2. Sinon, on affiche une erreur
+  * 
+  * 3. Si le pass est correct, on ouvre une session
+  * 4. Redirige l'utilisateur connecté
+  */
+
+/**
+ * Ouverture des session 
+ * A placer au plus haut possible, avant tout code PHP si possible
+ */
+  session_start();
+
+  // Si l'utilisateur est connecté, on le redirige vers la page d'accueil
+  if (isset($_SESSION['user']))
+  {
+      header('Location: index.php');
+  }
+
 // Connexion à la BDD
 require_once 'connexion.php';
 
 // Chargement des dépendances Composer
 require_once 'vendor/autoload.php';
 
-$query = $db->query('SELECT posts.id, posts.title, categories.id AS category_id, categories.name, posts.created_at FROM posts INNER JOIN users ON users.id = user_id INNER JOIN categories ON categories.id = category_id ORDER BY created_at DESC;');
+// Déclarer $error avant "if" pour eviter les problèms
+$error = null;
 
-$listArticles = $query->fetchAll();
+  if (!empty($_POST))
+  {
+    // 1. Recupération des données du formulaire et nottoyage
+    $email = htmlspecialchars(strip_tags($_POST['email']));
+    $password = htmlspecialchars(strip_tags($_POST['password']));  
 
-// dump($listArticles);
+    // 2. Vérifier si l'email existe en BDD
+    $query = $db->prepare('SELECT * FROM users WHERE email = :email');
+    $query->bindValue(':email', $email);
+    $query->execute();
+
+    // Récupère la première information trouvée
+    $user = $query->fetch();
+    // dump($user);
+
+    // Si l'utilisateur existe...    
+    if ($user)
+    {
+        // 2.1. Si oui, on virifie le mot de passe
+        if (password_verify($password, $user['password']))
+        {
+            $_SESSION['user'] = 
+            [
+                'id' => $user['id'],
+                'firstname' => $user['firstname'],
+                'lastname' => $user['lastname'],
+                'email' => $email,
+                'role' => $user['role']
+            ];
+
+            // Redirection vers l'accueil
+            header('Location: index.php');
+        }
+        else
+        {
+            $error = 'Email ou mot de passe invalide !';
+        }
+    }
+    else
+    {
+        $error = 'Email ou mot de passe invalide !';
+    }
+  }
+
+
 
 ?>
 
@@ -26,7 +95,7 @@ $listArticles = $query->fetchAll();
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
         <script src="../js/delete.js" defer></script>
         <script src="JS/function.js"></script>
-        <script src="JS/script.js" defer></script>
+        <script src="/script.js" defer></script>
         <link rel="stylesheet" href="CSS/stlyle.css">
         <link rel="stylesheet" href="CSS/login.css">
 
@@ -75,18 +144,21 @@ $listArticles = $query->fetchAll();
                 <div class="row">
                     <div class="col">
                     <div class="col-12">
-                <h1>Log in</h1>
+                <h1>Se connecter</h1>
             </div>
             <div class="col-12 mb-3">
-                <form>                    
-                    <div class="mb-3">
-                        <label for="nickName" class="form-label d-block">Pseudo (5 characters minimum)</label>
-                        <input type="text" lass="form-control" id="nickName" placeholder="Nick Name">
-                        <p class="erreur" id="nickNameError">Message d'erreur</p>
+                <form action="login.php" method="post">  
+                    
+                <!-- Message erreur -->
+                <?php if ($error !== null): ?>
+                    <div class="alert alert-danger">
+                        <?php echo $error; ?>
                     </div>
+                <?php endif; ?>
+
                     <div class="mb-3">
                         <label for="email" class="form-label d-block email">Email</label>
-                        <input type="text" class="form-control" id="email" placeholder="E-mail address">
+                        <input type="text" class="form-control" name="email" id="email" placeholder="E-mail address">
                         <p class="erreur" id="emailError">Message d'erreur</p>
                     </div>
 
@@ -94,7 +166,7 @@ $listArticles = $query->fetchAll();
                     <div class="mb-3">
                         <label for="password" class="form-label d-block">Mot de passe (8 characters minimum)</label>
                         <div class="input-group">
-                            <input type="password" class="form-control" id="password" placeholder="Password">                            
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Password">                            
                                 <span class="input-group-text view-password">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash" viewBox="0 0 16 16">
                                         <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z"/>
