@@ -37,7 +37,7 @@ $content = $article['content'];
 $category = $article['category_id'];
 $cover = $article['cover'];
 $error = null;
-$sucess = false;
+$success = false;
 
 // Code pour fonctionner le button "Enregistrer" la modification
 /**
@@ -86,7 +86,7 @@ if (!empty($_POST))
                 $query->bindValue(':id', $id, PDO::PARAM_INT);
                 $query->execute();
 
-                $success = 'L\'article a bien été modifié !'
+                $success = 'L\'article a bien été modifié !';
             }            
         }
         else 
@@ -146,7 +146,7 @@ if (!empty($_POST))
                         <nav>
                             <ul class="d-flex align-items-center justify-content-center gap-5 pt-3 m-0">
                                 <li><a href="../index.php" title="Home" class="text-secondary text-decoration-none">Home</a></li>
-                                <li><a href="listarticles.php" title="Home" class="text-secondary text-decoration-none">Articles</a></li>
+                                <li><a href="index.php" title="Home" class="text-secondary text-decoration-none">Articles</a></li>
                             </ul>
                         </nav>
                     </div>

@@ -12,9 +12,9 @@ require_once '../vendor/autoload.php';
 $query = $db->query('SELECT posts.id, posts.title, categories.id AS category_id, categories.name, posts.created_at FROM posts INNER JOIN users ON users.id = user_id INNER JOIN categories ON categories.id = category_id ORDER BY created_at DESC;');
 
 // Recupère tous les résultats et je les stocke dans la variable "$listeArticles"
-$listArticles = $query->fetchAll();
+$articles = $query->fetchAll();
 
-// dump($listArticles);
+// dump($articles);
 
 ?>
 
@@ -108,22 +108,39 @@ $listArticles = $query->fetchAll();
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach($listArticles as $detail): ?>
+                        <?php foreach($articles as $article): ?>
                             <tr class="text-start">                    
-                                <th scope="row"><?php echo $detail['id']; ?></th>                    
-                                <td><?php echo $detail['title']; ?></td>
-                                <td><?php echo $detail['name']; ?></td>
-                                <td><?php echo date('d-F-Y', strtotime($detail['created_at'])); ?></td>
+                                <th scope="row"><?php echo $article['id']; ?></th>                    
+                                <td><?php echo $article['title']; ?></td>
+                                <td><?php echo $article['name']; ?></td>
+                                <td><?php echo date('d-F-Y', strtotime($article['created_at'])); ?></td>
                                 <td class="m-auto">
-                                    <a href="delete.php?id=<?php echo $detail['id']; ?>" type="button" title="delete" class="btn btn-outline-danger btnDelete" data-bs-toggle="modal" data-bs-target="#confDelete">Supprimer</a>
+                                    <a href="delete.php?id=<?php echo $article['id']; ?>" type="button" title="delete" class="btn btn-outline-danger btnDelete" data-bs-toggle="modal" data-bs-target="#confDelete">Supprimer</a>
                                 </td>  
                                 <td class="m-auto">
-                                    <a href="edit.php?id=<?php echo $detail['id']; ?>" type="button" class="btn btn-outline-primary">Editer</a>
+                                    <a href="edit.php?id=<?php echo $article['id']; ?>" type="button" class="btn btn-outline-primary">Editer</a>
                                 </td>                                       
                             </tr>
                         <?php endforeach; ?> 
                     </tbody>  
                 </table>  
+
+                <div class="form-inline text-end">
+                    <form action="" method="post">
+                        <table>
+                            <th>
+                                <label for="">Limit row :</label> 
+                            </th> 
+                            <th>
+                                <input type="number" class="form-control" min="0" style="width:100px" required="required" name="limit"/>
+                            </th>
+                            <th>
+                                <button class="btn btn-primary" name="change">>></button>
+                            </th>
+                        </table>
+                    </form>
+                </div>
+                <?php include_once 'limit.php'; ?>
 
                 <!-- Confirmation de suppression -->
                     

@@ -70,7 +70,7 @@ if (!empty($_POST)) {
                 $query->execute();
 
                 // Redirection vers la page d'accueil de l'administration
-                header('Location: listarticles.php?successAdd=1');    
+                header('Location: index.php?successAdd=1');    
             }
             else {
                 // Sinon, on transfère l'eereur à la variable "error" pour l'afficher
@@ -104,39 +104,51 @@ if (!empty($_POST)) {
         <link rel="stylesheet" href="../css/style.css">
     </head>
     <body>
-    <header class="bg-dark py-4">
-            <div class="container">
+        <header class="bg-dark py-4">
+                <div class="container">
 
-                <!-- Ligne -->
-                <div class="row">
-                    <!-- Titre du site -->
-                    <div class="col-6 col-lg-12 text-start text-lg-center">
-                        <a href="index.php" title="Philo..." class="text-white text-decoration-none h1 logo">
-                            Philosophy. <span class="text-danger fs-4">Administration</span>
-                        </a>
-                    </div>
+                    <!-- Ligne -->
+                    <div class="row">
+                        <!-- Titre du site -->
+                        <div class="col-6 col-lg-12 text-start text-lg-center">
+                            <a href="index.php" title="Philo..." class="text-white text-decoration-none h1 logo">
+                                Philosophy. <span class="text-danger fs-4">Administration</span>
+                            </a>
+                        </div>
 
-                    <!-- Menu burger -->
-                    <div class="col-6 d-block d-lg-none text-end">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-list text-white" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
-                        </svg>
-                    </div>
+                        <!-- Menu burger -->
+                        <div class="col-6 d-block d-lg-none text-end">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-list text-white" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                            </svg>
+                        </div>
 
-                    <!-- Navigation -->
-                    <div class="col-12 d-none d-lg-block">
-                        <nav>
-                            <ul class="d-flex align-items-center justify-content-center gap-5 pt-3 m-0">
-                                <li><a href="../index.php" title="Home" class="text-secondary text-decoration-none">Home</a></li>
-                                <li><a href="categories.php" title="Categories" class="text-secondary text-decoration-none">Categories</a></li>
-                                <li><a href="#" title="Styles" class="text-secondary text-decoration-none">Styles</a></li>
-                                <li><a href="#" title="About" class="text-secondary text-decoration-none">About</a></li>
-                                <li><a href="#" title="Contact" class="text-secondary text-decoration-none">Contact</a></li>
-                            </ul>
-                        </nav>
+                        <!-- Navigation -->
+                        <div class="col-12 d-none d-lg-block">
+                            <nav>
+                                <ul class="d-flex align-items-center justify-content-center gap-5 pt-3 m-0">
+                                    <li><a href="../index.php" title="Home" class="text-secondary text-decoration-none">Home</a></li>
+                                    <li><a href="categories.php" title="Categories" class="text-secondary text-decoration-none">Categories</a></li>
+                                    <li><a href="#" title="Styles" class="text-secondary text-decoration-none">Styles</a></li>
+                                    <li><a href="#" title="About" class="text-secondary text-decoration-none">About</a></li>
+                                    
+                                    <?php if (isset($_SESSION['user'])): ?>
+                                    <!-- Lien de deconnexion -->
+                                    <li><a href="logout.php" title="Déconnection" class="text-secondary text-decoration-none">Se déconnecter</a></li>
+                                    <?php else: ?>
+                                        <!-- Lien de connexion -->
+                                        <li><a href="login.php" title="connecter" class="text-secondary text-decoration-none">Se connecter</a></li>
+                                    <?php endif; ?>
+
+                                    <!-- Afficher un lien vers l'administration seulement si le rôle est "ROLE_ADMIN" -->
+                                    <?php if(isset($_SESSION['user']) && $_SESSION['user']['role'] === 'ROLE_ADMIN'): ?>
+                                        <li><a href="admin/index.php" title="Administration" class="text-secondary text-decoration-none">Administration</a></li>
+                                    <?php endif; ?>
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
                 </div>
-            </div>
         </header>
         <div class="gradient"></div>
 
@@ -206,10 +218,11 @@ if (!empty($_POST)) {
             </div>
         </main>
 
-    <footer class="bg-dark py-4">
+        <footer class="bg-dark py-4">
             <div class="container">
                 <p class="m-0 text-white">&copy; Copyright Philosophy 2022</p>
             </div>
-    </footer>
+        </footer>
+
 </body>
 </html>
